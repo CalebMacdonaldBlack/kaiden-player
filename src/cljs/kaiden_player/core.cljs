@@ -11,42 +11,24 @@
             [kaiden-player.subscriptions])
   (:import goog.History))
 
-(defn nav-link [uri title page collapsed?]
+(defn nav-link [uri title page]
   (let [selected-page (rf/subscribe [:page])]
-    [:li.nav-item
-     {:class (when (= page @selected-page) "active")}
-     [:a.nav-link
-      {:href uri
-       :on-click #(reset! collapsed? true)} title]]))
+    [:a.item
+     {:class (when (= page @selected-page) "active")
+      :href uri}
+     title]))
 
 (defn navbar []
-  (r/with-let [collapsed? (r/atom true)]
-    [:nav.navbar.navbar-dark.bg-primary
-     [:button.navbar-toggler.hidden-sm-up
-      {:on-click #(swap! collapsed? not)} "☰"]
-     [:div.collapse.navbar-toggleable-xs
-      (when-not @collapsed? {:class "in"})
-      [:a.navbar-brand {:href "#/"} "kaiden-player"]
-      [:ul.nav.navbar-nav
-       [nav-link "#/" "Home" :home collapsed?]
-       [nav-link "#/about" "About" :about collapsed?]]]]))
-
-(defn about-page []
-  [:div.container
-   [:div.row
-    [:div.col-md-12
-     [:img {:src (str js/context "/img/warning_clojure.png")}]]]])
+  [:div.ui.menu
+   [:div.header.item "Kaiden Player"]
+   (nav-link "#/" "Home" :home)])
 
 (defn home-page []
-  [:div.container
-   (when-let [docs @(rf/subscribe [:docs])]
-     [:div.row>div.col-sm-12
-      [:div {:dangerouslySetInnerHTML
-             {:__html (md->html docs)}}]])])
+  [:div.ui.container
+   [:h1.ui.header "Home Page"]])
 
 (def pages
-  {:home #'home-page
-   :about #'about-page})
+  {:home #'home-page})
 
 (defn page []
   [:div
@@ -58,10 +40,7 @@
 (secretary/set-config! :prefix "#")
 
 (secretary/defroute "/" []
-  (rf/dispatch [:set-active-page :home]))
-
-(secretary/defroute "/about" []
-  (rf/dispatch [:set-active-page :about]))
+                    (rf/dispatch [:set-active-page :home]))
 
 ;; -------------------------
 ;; History
