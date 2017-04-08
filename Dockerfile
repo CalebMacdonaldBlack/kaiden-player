@@ -9,6 +9,7 @@ RUN mkdir -p /kaiden-player
 COPY . /usr/src/app
 
 RUN apk --update upgrade && \
+    lein kibit && \
     lein test && \
     lein uberjar && \
     # Copy the standalone runnable to a new location
