@@ -12,3 +12,5 @@ profiles.clj
 /log
 *.iml
 .idea
+.envrc
+
