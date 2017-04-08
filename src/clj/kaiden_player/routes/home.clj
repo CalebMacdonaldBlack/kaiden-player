@@ -1,13 +1,14 @@
 (ns kaiden-player.routes.home
   (:require [kaiden-player.layout :as layout]
             [compojure.core :refer [defroutes GET]]
-            [ring.util.http-response :as response]
-            [clojure.java.io :as io]))
+            [ring.util.response :refer [response redirect content-type]]
+            [buddy.auth :refer [authenticated? throw-unauthorized]]))
 
-(defn home-page []
-  (layout/render "home.html"))
+(defn home-page [request]
+  (if-not (authenticated? request)
+    (redirect "/login")
+    (layout/render "home.html")))
 
 (defroutes home-routes
-  (GET "/" []
-       (home-page)))
+  (GET "/" [] home-page))
 
