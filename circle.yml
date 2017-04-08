@@ -1,0 +1,4 @@
+test:
+  override:
+    - lein trampoline kibit
+    - lein trampoline test

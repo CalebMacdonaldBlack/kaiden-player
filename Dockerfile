@@ -9,6 +9,7 @@ RUN mkdir -p /kaiden-player
 COPY . /usr/src/app
 
 RUN apk --update upgrade && \
+    lein kibit && \
     lein test && \
     lein uberjar && \
     # Copy the standalone runnable to a new location
@@ -16,4 +17,4 @@ RUN apk --update upgrade && \
     rm -rf /usr/src/app/
 
 EXPOSE 3000
-ENTRYPOINT ["/usr/bin/java", "-jar", "/kaiden-player/app.jar"]
+ENTRYPOINT ["/usr/bin/java", "-jar", "/kaiden-player/app.jar", "migrate", "&&", "/usr/bin/java", "-jar", "/kaiden-player/app.jar"]
