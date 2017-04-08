@@ -104,7 +104,7 @@ check_exec_exists() {
 
 build_docker_database() {
 	echo_message "Building Docker Database Image"
-	docker build -t bs-postgres ./tools/Postgres/
+	docker build -t kp-postgres ./tools/Postgres/
 }
 
 wait_for_docker() {
@@ -124,27 +124,27 @@ run_docker_database() {
 	wait_for_docker
 	echo_message "Starting..."
 
-	docker_image=$(docker images -q bs-postgres)
+	docker_image=$(docker images -q kp-postgres)
 
 	if [ "$docker_image" ]; then
 		echo_message "Using existing container"
-		docker start bs-postgres
+		docker start kp-postgres
 	else
 		echo_message "No container found... Building new container"
 		build_docker_database
-		docker run -d -p 5432:5432 --name bs-postgres bs-postgres
+		docker run -d -p 5432:5432 --name kp-postgres kp-postgres
 	fi
 }
 
 stop_docker_database() {
 	echo_message "Shutting down Database Image"
-	docker stop bs-postgres
+	docker stop kp-postgres
 	osascript -e 'quit app "Docker"'
 }
 
 docker_clean() {
 	stop_docker_database
-	docker rm bs-postgres
+	docker rm kp-postgres
 	run_docker_database
 	migrate
 }
