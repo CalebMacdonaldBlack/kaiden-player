@@ -11,8 +11,3 @@
   :set-active-page
   (fn [db [_ page]]
     (assoc db :page page)))
-
-(reg-event-db
-  :set-docs
-  (fn [db [_ docs]]
-    (assoc db :docs docs)))
