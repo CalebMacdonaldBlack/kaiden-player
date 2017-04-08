@@ -9,9 +9,9 @@
 (use-fixtures
   :once
   (fn [f]
-    (prn "========================================");
+    (prn "========================================")
     (prn (select-keys env [:database-url]))
-    (prn "========================================");
+    (prn "========================================")
     (mount/start
       #'kaiden-player.config/env
       #'kaiden-player.db.core/*db*)
