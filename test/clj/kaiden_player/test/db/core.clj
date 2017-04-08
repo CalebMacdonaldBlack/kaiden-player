@@ -12,10 +12,6 @@
     (mount/start
       #'kaiden-player.config/env
       #'kaiden-player.db.core/*db*)
-    (prn "========================================")
-    (prn env)
-    (prn (select-keys env [:database-url]))
-    (prn "========================================")
     (migrations/migrate ["migrate"] (select-keys env [:database-url]))
     (f)))
 
