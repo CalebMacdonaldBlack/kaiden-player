@@ -55,8 +55,6 @@
 
 ;; -------------------------
 ;; Initialize app
-(defn fetch-docs! []
-  (GET "/docs" {:handler #(rf/dispatch [:set-docs %])}))
 
 (defn mount-components []
   (rf/clear-subscription-cache!)
@@ -65,6 +63,5 @@
 (defn init! []
   (rf/dispatch-sync [:initialize-db])
   (load-interceptors!)
-  (fetch-docs!)
   (hook-browser-navigation!)
   (mount-components))

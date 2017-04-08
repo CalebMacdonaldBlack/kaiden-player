@@ -5,8 +5,3 @@
   :page
   (fn [db _]
     (:page db)))
-
-(reg-sub
-  :docs
-  (fn [db _]
-    (:docs db)))
