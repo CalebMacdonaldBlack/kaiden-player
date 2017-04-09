@@ -26,14 +26,12 @@
         found-password (get authdata (keyword email))]
     (if (and found-password (= found-password password))
       (let [updated-session (assoc session :identity (keyword email))]
-        (-> (redirect "/")
-            (assoc :session updated-session)))
+        (assoc (redirect "/") :session updated-session))
       (layout/render "login.html"))))
 
 (defn logout
   [_]
-  (-> (redirect "/login")
-      (assoc :session {})))
+  (assoc (redirect "/login") :session {}))
 
 (defn home-page [request]
   (if-not (authenticated? request)

@@ -13,8 +13,7 @@
 
 (def app-routes
   (routes
-    (-> #'home-routes
-        (wrap-routes middleware/wrap-formats))
+    (wrap-routes #'home-routes middleware/wrap-formats)
     (route/not-found
       (:body
         (error-page {:status 404
