@@ -1,6 +1,7 @@
 (ns kaiden-player.handlers
   (:require [kaiden-player.db :as db]
-            [re-frame.core :refer [dispatch reg-event-db]]))
+            [ajax.core :refer [POST]]
+            [re-frame.core :refer [dispatch reg-event-db reg-event-fx]]))
 
 (reg-event-db
   :initialize-db
@@ -11,3 +12,13 @@
   :set-active-page
   (fn [db [_ page]]
     (assoc db :page page)))
+
+(reg-event-fx
+  :add-song
+  (fn [_ [_ song-data]]
+    (prn song-data)
+    (POST "/songs" {:params song-data
+                    :handler #(prn "SUCCESS")})))
+
+
+
