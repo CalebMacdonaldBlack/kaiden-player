@@ -25,12 +25,10 @@
         test (prn (str email "  " password))
         found-password (get authdata (keyword email))]
     (if (and found-password (= found-password password))
-      (do (prn "GRANTED")
-          (let [updated-session (assoc session :identity (keyword email))]
-            (-> (redirect "/")
-                (assoc :session updated-session))))
-      (do (prn "DENIED")
-          (layout/render "login.html")))))
+      (let [updated-session (assoc session :identity (keyword email))]
+        (-> (redirect "/")
+            (assoc :session updated-session)))
+      (layout/render "login.html"))))
 
 (defn logout
   [_]
