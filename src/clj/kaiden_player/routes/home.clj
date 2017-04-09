@@ -3,35 +3,8 @@
             [compojure.core :refer [defroutes GET POST]]
             [ring.util.response :refer [response redirect content-type]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
-            [ring.util.http-response :as response]))
-
-(def authdata
-  "Global var that stores valid users with their
-   respective passwords."
-  {:admin "secret"
-   :test "secret"})
-
-(defn post-login
-  "Check request username and password against authdata
-  username and passwords.
-  On successful authentication, set appropriate user
-  into the session and redirect to the value of
-  (:next (:query-params request)). On failed
-  authentication, renders the login page."
-  [request]
-  (let [email (get-in request [:form-params "email"])
-        password (get-in request [:form-params "password"])
-        session (:session request)
-        test (prn (str email "  " password))
-        found-password (get authdata (keyword email))]
-    (if (and found-password (= found-password password))
-      (let [updated-session (assoc session :identity (keyword email))]
-        (assoc (redirect "/") :session updated-session))
-      (layout/render "login.html"))))
-
-(defn logout
-  [_]
-  (assoc (redirect "/login") :session {}))
+            [ring.util.http-response :as response]
+            [kaiden-player.auth :refer [logout login]]))
 
 (defn home-page [request]
   (if-not (authenticated? request)
@@ -42,5 +15,5 @@
   (GET "/" [] home-page)
   (GET "/login" [] (layout/render "login.html"))
   (GET "/logout" [] logout)
-  (POST "/login" [] post-login))
+  (POST "/login" [] login))
 
