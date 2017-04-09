@@ -1,6 +1,9 @@
 (ns kaiden-player.views.root-template
   (:require [re-frame.core :as rf]
-            [kaiden-player.core :refer [pages]]))
+            [kaiden-player.views.home :refer [home-page]]))
+
+(def pages
+  {:home #'home-page})
 
 (defn nav-link [uri title page]
   (let [selected-page (rf/subscribe [:page])]

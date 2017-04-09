@@ -9,12 +9,8 @@
             [kaiden-player.ajax :refer [load-interceptors!]]
             [kaiden-player.handlers]
             [kaiden-player.subscriptions]
-            [kaiden-player.views.home :refer [home-page]]
             [kaiden-player.views.root-template :refer [page]])
   (:import goog.History))
-
-(def pages
-  {:home #'home-page})
 
 ;; -------------------------
 ;; Routes
