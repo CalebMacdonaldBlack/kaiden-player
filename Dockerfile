@@ -17,4 +17,4 @@ RUN apk --update upgrade && \
     rm -rf /usr/src/app/
 
 EXPOSE 3000
-ENTRYPOINT /usr/bin/java -jar /kaiden-player/app.jar && echo dicks
+ENTRYPOINT ["/usr/bin/java", "-jar", "/kaiden-player/app.jar"]
