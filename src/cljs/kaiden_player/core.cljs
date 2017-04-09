@@ -21,7 +21,9 @@
 (defn navbar []
   [:div.ui.menu
    [:div.header.item "Kaiden Player"]
-   (nav-link "#/" "Home" :home)])
+   (nav-link "#/" "Home" :home)
+   [:div.right.menu
+    [:a.item {:href "/logout"} "Logout"]]])
 
 (defn home-page []
   [:div.ui.container

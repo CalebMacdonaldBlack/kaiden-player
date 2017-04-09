@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kaiden Player</title>
+</head>
+<body>
+<div class="ui menu">
+    <div class="ui header item">
+        Kaiden Player
+    </div>
+</div>
+<div class="ui container">
+    <h1 class="ui center aligned header">Login</h1>
+</div>
+<div class="ui three column doubling stackable grid container">
+    <div class="column"></div>
+    <div class="column">
+        <form class="ui form" action="/login" method="post">
+            <div class="field">
+                <label>Email</label>
+                <input type="text" name="email" placeholder="Email">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
+            <button class="ui button" type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="column"></div>
+</div>
+
+
+{% style "/css/semantic.min.css" %}
+</body>
+</html>
+
+
+
+
