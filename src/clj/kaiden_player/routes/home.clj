@@ -6,7 +6,8 @@
             [buddy.auth :refer [authenticated? throw-unauthorized]]
             [ring.util.http-response :as response]
             [kaiden-player.auth :refer [logout login]]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [ring.util.codec :refer [url-encode]]))
 
 (def cred {:endpoint "ap-southeast-2"})
 
@@ -15,7 +16,10 @@
     (redirect "/login")
     (layout/render "home.html")))
 
-(defn songs [request]
+(defn song-link [title]
+  (str "/songs/" (url-encode title) ".mp3"))
+
+(defn upload-song [request]
   (let [link (get (:params request) "link")
         title (get (:params request) "title")
         file-size (get (:params request) "filesize")]
@@ -24,12 +28,13 @@
                                   :key (str title ".mp3")
                                   :input-stream song-stream
                                   :metadata {:content-length (read-string file-size)}
-                                  :return-values "ALL_OLD")))))
+                                  :return-values "ALL_OLD")))
+    (song-link title)))
 
 (defroutes home-routes
            (GET "/" [] home-page)
            (GET "/login" [] (layout/render "login.html"))
            (GET "/logout" [] logout)
            (POST "/login" [] login)
-           (POST "/songs" [] songs)
+           (POST "/songs" [] #(response/created (upload-song %)))
            (GET "/test" [] (io/input-stream "test.mp3")))

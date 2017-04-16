@@ -32,6 +32,7 @@
                  [reagent "0.6.1"]
                  [reagent-utils "0.2.1"]
                  [ring-webjars "0.1.1"]
+                 [ring/ring-codec "1.0.1"]
                  [ring/ring-core "1.6.0-RC2"]
                  [ring/ring-defaults "0.2.3"]
                  [secretary "1.2.3"]
