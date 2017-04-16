@@ -15,16 +15,14 @@
     (layout/render "home.html")))
 
 (defn songs [request]
-  (prn request)
   (let [link (get (:params request) "link")
-        title (get (:params request) "title")]
-    (prn link)
+        title (get (:params request) "title")
+        file-size (get (:params request) "filesize")]
     (let [song-stream (clojure.java.io/input-stream link)]
-      (prn song-stream)
       (s3/put-object cred :bucket-name "kaiden-player"
                           :key (str title ".mp3")
                           :input-stream song-stream
-                         ;:metadata {:content-length 3290000}
+                          :metadata {:content-length (read-string file-size)}
                           :return-values "ALL_OLD"))
     (response/ok)))
 
@@ -34,7 +32,3 @@
            (GET "/logout" [] logout)
            (POST "/login" [] login)
            (POST "/songs" [] songs))
-
-;; put object from stream
-(def some-bytes (.getBytes "Amazonica" "UTF-8"))
-(def input-stream (java.io.ByteArrayInputStream. some-bytes))
