@@ -10,3 +10,8 @@
   :error-msg
   (fn [db _]
     (:error-msg db)))
+
+(reg-sub
+  :success-msg
+  (fn [db _]
+    (:success-msg db)))
