@@ -5,7 +5,7 @@
 
   :dependencies [[amazonica "0.3.95"]
                  [buddy "1.3.0"]
-                 [cljs-ajax "0.5.8"]
+                 [cljs-ajax "0.5.8" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
