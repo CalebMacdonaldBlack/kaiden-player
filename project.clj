@@ -3,8 +3,9 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[buddy "1.3.0"]
-                 [cljs-ajax "0.5.8"]
+  :dependencies [[amazonica "0.3.95"]
+                 [buddy "1.3.0"]
+                 [cljs-ajax "0.5.8" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
@@ -19,6 +20,7 @@
                  [mount "0.1.11"]
                  [org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.495" :scope "provided"]
+                 [org.clojure/data.json "0.2.6"]
                  [org.clojure/tools.cli "0.3.5"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.postgresql/postgresql "42.0.0"]
@@ -30,6 +32,7 @@
                  [reagent "0.6.1"]
                  [reagent-utils "0.2.1"]
                  [ring-webjars "0.1.1"]
+                 [ring/ring-codec "1.0.1"]
                  [ring/ring-core "1.6.0-RC2"]
                  [ring/ring-defaults "0.2.3"]
                  [secretary "1.2.3"]

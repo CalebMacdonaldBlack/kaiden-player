@@ -8,34 +8,9 @@
             [ajax.core :refer [GET POST]]
             [kaiden-player.ajax :refer [load-interceptors!]]
             [kaiden-player.handlers]
-            [kaiden-player.subscriptions])
+            [kaiden-player.subscriptions]
+            [kaiden-player.views.root-template :refer [page]])
   (:import goog.History))
-
-(defn nav-link [uri title page]
-  (let [selected-page (rf/subscribe [:page])]
-    [:a.item
-     {:class (when (= page @selected-page) "active")
-      :href uri}
-     title]))
-
-(defn navbar []
-  [:div.ui.menu
-   [:div.header.item "Kaiden Player"]
-   (nav-link "#/" "Home" :home)
-   [:div.right.menu
-    [:a.item {:href "/logout"} "Logout"]]])
-
-(defn home-page []
-  [:div.ui.container
-   [:h1.ui.header "Home Page"]])
-
-(def pages
-  {:home #'home-page})
-
-(defn page []
-  [:div
-   [navbar]
-   [(pages @(rf/subscribe [:page]))]])
 
 ;; -------------------------
 ;; Routes

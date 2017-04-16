@@ -1,46 +1,40 @@
 (ns kaiden-player.routes.home
   (:require [kaiden-player.layout :as layout]
+            [amazonica.aws.s3 :as s3]
             [compojure.core :refer [defroutes GET POST]]
             [ring.util.response :refer [response redirect content-type]]
             [buddy.auth :refer [authenticated? throw-unauthorized]]
-            [ring.util.http-response :as response]))
+            [ring.util.http-response :as response]
+            [kaiden-player.auth :refer [logout login]]
+            [clojure.java.io :as io]
+            [ring.util.codec :refer [url-encode]]))
 
-(def authdata
-  "Global var that stores valid users with their
-   respective passwords."
-  {:admin "secret"
-   :test "secret"})
-
-(defn post-login
-  "Check request username and password against authdata
-  username and passwords.
-  On successful authentication, set appropriate user
-  into the session and redirect to the value of
-  (:next (:query-params request)). On failed
-  authentication, renders the login page."
-  [request]
-  (let [email (get-in request [:form-params "email"])
-        password (get-in request [:form-params "password"])
-        session (:session request)
-        test (prn (str email "  " password))
-        found-password (get authdata (keyword email))]
-    (if (and found-password (= found-password password))
-      (let [updated-session (assoc session :identity (keyword email))]
-        (assoc (redirect "/") :session updated-session))
-      (layout/render "login.html"))))
-
-(defn logout
-  [_]
-  (assoc (redirect "/login") :session {}))
+(def cred {:endpoint "ap-southeast-2"})
 
 (defn home-page [request]
   (if-not (authenticated? request)
     (redirect "/login")
     (layout/render "home.html")))
 
-(defroutes home-routes
-  (GET "/" [] home-page)
-  (GET "/login" [] (layout/render "login.html"))
-  (GET "/logout" [] logout)
-  (POST "/login" [] post-login))
+(defn song-link [title]
+  (str "/songs/" (url-encode title) ".mp3"))
 
+(defn upload-song [request]
+  (let [link (get (:params request) "link")
+        title (get (:params request) "title")
+        file-size (get (:params request) "filesize")]
+    (let [song-stream (clojure.java.io/input-stream link)]
+      (response/ok (s3/put-object cred :bucket-name "kaiden-player"
+                                  :key (str title ".mp3")
+                                  :input-stream song-stream
+                                  :metadata {:content-length (read-string file-size)}
+                                  :return-values "ALL_OLD")))
+    (song-link title)))
+
+(defroutes home-routes
+           (GET "/" [] home-page)
+           (GET "/login" [] (layout/render "login.html"))
+           (GET "/logout" [] logout)
+           (POST "/login" [] login)
+           (POST "/songs" [] #(response/created (upload-song %)))
+           (GET "/test" [] (io/input-stream "test.mp3")))

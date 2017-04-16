@@ -1,6 +1,7 @@
 (ns kaiden-player.handlers
   (:require [kaiden-player.db :as db]
-            [re-frame.core :refer [dispatch reg-event-db]]))
+            [ajax.core :refer [POST]]
+            [re-frame.core :refer [dispatch reg-event-db reg-event-fx] :as rf]))
 
 (reg-event-db
   :initialize-db
@@ -11,3 +12,39 @@
   :set-active-page
   (fn [db [_ page]]
     (assoc db :page page)))
+
+(reg-event-db
+  :add-song
+  (fn [db [_ song-data]]
+    (POST "/songs" {:params song-data
+                    :handler #(rf/dispatch [:song-uploaded-successfully song-data])})
+    (-> db
+        (assoc :loading true)
+        (dissoc :error-msg)
+        (dissoc :success-msg))))
+
+(reg-event-db
+  :song-not-found
+  (fn [db _]
+    (-> db
+      (dissoc :success-msg)
+      (assoc :error-msg "Song was not found at that link!"))))
+
+(reg-event-db
+  :song-uploaded-successfully
+  (fn [db [_ response]]
+    (-> db
+      (dissoc :loading)
+      (dissoc :error-msg)
+      (assoc :success-msg (str (get response "title") ".mp3 was uploaded successfully")))))
+
+(reg-event-db
+  :loading
+  (fn [db _]
+    (prn "loading")
+    (assoc db :loading true)))
+
+(reg-event-db
+  :stop-loading
+  (fn [db _]
+    (dissoc db :loading)))
