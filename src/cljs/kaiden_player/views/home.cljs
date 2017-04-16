@@ -10,6 +10,9 @@
 (defn youtubeinmp3-handler [response]
   (rf/dispatch [:add-song response]))
 
+(defn youtubeinmp3-error-handler [response]
+  (rf/dispatch [:song-not-found response]))
+
 (defn home-page []
   [:div.ui.grid
    [:div.four.wide.column]
@@ -24,6 +27,11 @@
       [:button.ui.button {:type "button"
                           :on-click #(GET (str mp3-api-endpoint (js/encodeURIComponent @url))
                                           {:handler youtubeinmp3-handler
+                                           :error-handler youtubeinmp3-error-handler
                                            :response-format :json})}
-                         "Add"]]]]
+                         "Add"]]]
+
+    (let [error-msg (rf/subscribe [:error-msg])]
+      (when @error-msg
+        [:small {:style {:color "red"}} @error-msg]))]
    [:div.four.wide.column]])

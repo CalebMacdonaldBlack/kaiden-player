@@ -20,5 +20,7 @@
     (POST "/songs" {:params song-data
                     :handler #(prn "SUCCESS")})))
 
-
-
+(reg-event-db
+  :song-not-found
+  (fn [db _]
+    (assoc db :error-msg "Song was not found at that link!")))

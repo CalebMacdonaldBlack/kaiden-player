@@ -5,3 +5,8 @@
   :page
   (fn [db _]
     (:page db)))
+
+(reg-sub
+  :error-msg
+  (fn [db _]
+    (:error-msg db)))
