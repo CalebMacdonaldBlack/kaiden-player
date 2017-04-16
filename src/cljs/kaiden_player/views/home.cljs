@@ -38,9 +38,11 @@
                                                :response-format :json})}
                              "Add"]]]
         (when @loading
-          [:small {:style {:color "gold"}} "Loading"])
+          [:img {:src "/img/loading.gif" :style {:display "block" :margin "auto"}}])
         (when @error-msg
           [:small {:style {:color "red"}} @error-msg])
         (when @success-msg
-          [:small {:style {:color "green"}} @success-msg])])
+          [:small {:style {:color "green"}} @success-msg])
+        [:audio {:controls true}
+         [:source {:src "/test" type "audio/mpeg"}]]])
    [:div.four.wide.column]])
