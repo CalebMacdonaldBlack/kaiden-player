@@ -1,4 +1,4 @@
-(ns kaiden-player.views.test-route-template
+(ns kaiden-player.views.test-root-template
   (:require [cljs.test :refer-macros [is are deftest testing use-fixtures]]
             [pjstadig.humane-test-output]
             [reagent.core :as reagent :refer [atom]]
@@ -46,7 +46,7 @@
                   rf/subscribe mock-subscribe]
                  (let [expected [:div
                                  [[:nav]]
-                                 [#'kaiden-player.views.test-route-template/mock-page]]
+                                 [#'kaiden-player.views.test-root-template/mock-page]]
                        actual (page)]
                    (is (= expected actual))))))
 
