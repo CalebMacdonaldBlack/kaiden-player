@@ -6,8 +6,6 @@
             [kaiden-player.routes.home :as home-routes]))
 
 (defn mock-upload-song [request]
-  (prn request)
-  (prn (:params request))
   (str "/songs/" (url-encode (get-in request [:params :title] ".mp3"))))
 
 (deftest test-app
