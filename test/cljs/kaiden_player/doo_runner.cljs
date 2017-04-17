@@ -3,5 +3,7 @@
             [kaiden-player.core-test]))
 
 (doo-tests 'kaiden-player.core-test
-           'kaiden-player.test-handlers)
+           'kaiden-player.test-handlers
+           'kaiden-player.test-subscribers)
+
 
