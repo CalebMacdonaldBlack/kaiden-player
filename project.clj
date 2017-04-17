@@ -6,6 +6,7 @@
   :dependencies [[amazonica "0.3.95"]
                  [buddy "1.3.0"]
                  [cljs-ajax "0.5.8" :exclusions [com.fasterxml.jackson.core/jackson-core]]
+                 [com.google.guava/guava "21.0"]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
@@ -111,9 +112,9 @@
                       :source-map true
                       :optimizations :none
                       :pretty-print true}}}}
-                  
-                  
-                  
+
+
+
                   :doo {:build "test"}
                   :source-paths ["env/dev/clj"]
                   :resource-paths ["env/dev/resources"]

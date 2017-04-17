@@ -163,7 +163,7 @@ test() {
 	echo_message "Testing clj"
 	lein test
 	echo_message "Tesing cljs"
-	lein doo chrome app
+	lein with-profile test doo phantom
 }
 
 figwheel() {
