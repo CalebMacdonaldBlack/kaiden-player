@@ -14,3 +14,4 @@ profiles.clj
 .idea
 .envrc
 figwheel_server.log
+node_modules
