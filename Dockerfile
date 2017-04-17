@@ -3,6 +3,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY project.clj /usr/src/app/
 RUN lein deps
+RUN npm install -g phantomjs
 
 RUN mkdir -p /kaiden-player
 
@@ -12,6 +13,7 @@ RUN apk --update upgrade && \
     lein kibit && \
     lein test && \
     lein uberjar && \
+    lein with-profile test doo phantom && \
     # Copy the standalone runnable to a new location
     mv /usr/src/app/target/uberjar/kaiden-player.jar /kaiden-player/app.jar && \
     rm -rf /usr/src/app/
