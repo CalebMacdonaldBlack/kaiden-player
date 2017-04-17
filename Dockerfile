@@ -13,7 +13,7 @@ RUN apk --update upgrade && \
     lein kibit && \
     lein test && \
     lein uberjar && \
-    lein with-profile test doo phantom && \
+    lein with-profile test doo phantom once && \
     # Copy the standalone runnable to a new location
     mv /usr/src/app/target/uberjar/kaiden-player.jar /kaiden-player/app.jar && \
     rm -rf /usr/src/app/

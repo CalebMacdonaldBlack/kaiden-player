@@ -8,4 +8,4 @@ test:
   override:
     - lein kibit
     - lein trampoline test
-    - lein with-profile test doo phantom
+    - lein with-profile test doo phantom once
