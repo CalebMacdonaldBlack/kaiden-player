@@ -4,6 +4,7 @@
 
 (doo-tests 'kaiden-player.core-test
            'kaiden-player.test-handlers
-           'kaiden-player.test-subscribers)
+           'kaiden-player.test-subscribers
+           'kaiden-player.views.test-route-template)
 
 
