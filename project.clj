@@ -7,6 +7,7 @@
                  [buddy "1.3.0"]
                  [cljs-ajax "0.5.8" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [com.google.guava/guava "21.0"]
+                 [com.rpl/specter "1.0.1"]
                  [compojure "1.5.2"]
                  [conman "0.6.3"]
                  [cprop "0.1.10"]
