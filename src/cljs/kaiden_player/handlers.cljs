@@ -1,6 +1,6 @@
 (ns kaiden-player.handlers
   (:require [kaiden-player.db :as db]
-            [ajax.core :refer [POST]]
+            [ajax.core :refer [POST GET]]
             [re-frame.core :refer [dispatch reg-event-db reg-event-fx] :as rf]))
 
 (defn- init-db
@@ -31,6 +31,14 @@
       (dissoc :error-msg)
       (assoc :success-msg (str (get response "title") ".mp3 was uploaded successfully"))))
 
+(defn- update-songs
+  [db [_ songs]]
+  (assoc db :songs (vec songs)))
+
+(defn- load-songs [db _]
+  (GET "/songs" {:handler #(rf/dispatch [:update-songs %])})
+  {})
+
 (reg-event-db
   :initialize-db
   init-db)
@@ -50,3 +58,11 @@
 (reg-event-db
   :song-uploaded-successfully
   song-uploaded-successfully)
+
+(reg-event-fx
+  :load-songs
+  load-songs)
+
+(reg-event-db
+  :update-songs
+  update-songs)

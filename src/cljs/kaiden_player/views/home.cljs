@@ -41,6 +41,17 @@
    (when @success-msg
      [:small {:style {:color "green"}} @success-msg])])
 
+(defn list-songs []
+  [:table.ui.celled.striped.table
+   [:thead
+    [:tr
+     [:th "Title"]]]
+   [:tbody
+    (for [song @(rf/subscribe [:songs])]
+      [:tr (prn song)
+       [:td song]])]])
+
+
 (defn home-page []
   [:div.ui.grid
    [:div.four.wide.column]
@@ -54,4 +65,9 @@
         (url-input loading url)
         (submit-button loading url mp3-api-endpoint)]]
       (message loading error-msg success-msg)])
-   [:div.four.wide.column]])
+   [:div.four.wide.column]
+   [:div.two.wide.column]
+   [:div.twelve.wide.column
+    [:h1 "Songs"]
+    (list-songs)]
+   [:div.two.wide.column]])
