@@ -7,10 +7,8 @@
 
 (def mp3-api-endpoint "http://www.youtubeinmp3.com/fetch/?format=json&filesize=1&video=")
 
-(defn- youtubeinmp3-handler [url]
-  (fn [response]
-    (reset! url "")
-    (rf/dispatch [:add-song response])))
+(defn- youtubeinmp3-handler [response]
+  (rf/dispatch [:add-song response]))
 
 (defn- youtubeinmp3-error-handler [response]
   (rf/dispatch [:song-not-found response]))
@@ -27,7 +25,7 @@
   [:button.ui.button {:type     "button"
                       :disabled @loading
                       :on-click #(GET (str endpoint (js/encodeURIComponent @url))
-                                      {:handler         (youtubeinmp3-handler url)
+                                      {:handler         youtubeinmp3-handler
                                        :error-handler   youtubeinmp3-error-handler
                                        :response-format :json})}
    "Add"])
