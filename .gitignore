@@ -16,3 +16,4 @@ profiles.clj
 figwheel_server.log
 node_modules
 out
+doo-index.html
