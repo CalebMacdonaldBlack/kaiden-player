@@ -1,11 +1,15 @@
 (ns kaiden-player.views.home
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
+            [clojure.string :as string]
             [ajax.core :refer [GET]]))
 
 (defonce url (r/atom ""))
 
 (def mp3-api-endpoint "http://www.youtubeinmp3.com/fetch/?format=json&filesize=1&video=")
+
+(defn remove-mp3-suffix [song-name]
+  (string/replace song-name ".mp3" ""))
 
 (defn- youtubeinmp3-handler [url]
   (fn [response]
@@ -45,12 +49,17 @@
   [:table.ui.celled.striped.table
    [:thead
     [:tr
-     [:th "Title"]]]
+     [:th "Songs"]]]
    [:tbody
     (for [song @(rf/subscribe [:songs])]
-      [:tr (prn song)
-       [:td song]])]])
+      [:tr
+       [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
+            (remove-mp3-suffix song)]])]])
 
+(defn music-player []
+  (let [current-song @(rf/subscribe [:current-song])]
+    [:audio#player {:controls true :on-ended #(rf/dispatch [:next-song current-song])}
+     [:source {:src (str "/songs/"(js/encodeURIComponent current-song)) :type "audio/mpeg"}]]))
 
 (defn home-page []
   [:div.ui.grid
@@ -68,6 +77,10 @@
    [:div.four.wide.column]
    [:div.two.wide.column]
    [:div.twelve.wide.column
-    [:h1 "Songs"]
+    [:h1 "Player"]
+    (music-player)
+    (let [current-song @(rf/subscribe [:current-song])]
+      (when current-song
+        [:h2 "Currently playing: " [:em [:small {:style {:color "#555" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
     (list-songs)]
    [:div.two.wide.column]])
