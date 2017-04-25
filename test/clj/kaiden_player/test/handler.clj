@@ -29,10 +29,16 @@
     (let [response ((app) (request :get "/invalid"))]
       (is (= 404 (:status response)))))
 
-  (testing "songs"
+  (testing "post songs"
     (with-redefs [home-routes/upload-song mock-upload-song]
       (let [response ((app) (request :post "/songs" {"filesize" "4712000"
                                                      "length" "195"
                                                      "link" "http://www.youtubeinmp3.com/download/get/?i=u7WIXh3ZF6YZPEvYZCqCuRcnvVuYSX96&e=92"
                                                      "title" "Rednex - Cotton Eye Joe"}))]
-        (is (= 201 (:status response)))))))
+        (is (= 201 (:status response))))))
+
+  (testing "get songes"
+    (with-redefs [home-routes/get-song-titles mock-get-song-titles]
+      (let [response ((app) (request :get "/songs"))]
+        (is (= 200 (:status response)))
+        (is (= ["song1" "song2"] (:body response)))))))
