@@ -3,10 +3,17 @@
             [ring.mock.request :refer :all]
             [ring.util.codec :refer [url-encode]]
             [kaiden-player.handler :refer :all]
-            [kaiden-player.routes.home :as home-routes]))
+            [kaiden-player.routes.home :as home-routes]
+            [kaiden-player.routes.home :refer [get-song-titles]]
+            [ring.util.http-response :as response]
+            [cheshire.core :as json]))
 
 (defn mock-upload-song [request]
   (str "/songs/" (url-encode (get-in request [:params :title] ".mp3"))))
+
+(defn mock-get-song-titles [_]
+  ["song1" "song2"])
+
 
 (deftest test-app
   (testing "main route"
@@ -41,4 +48,5 @@
     (with-redefs [home-routes/get-song-titles mock-get-song-titles]
       (let [response ((app) (request :get "/songs"))]
         (is (= 200 (:status response)))
-        (is (= ["song1" "song2"] (:body response)))))))
+        (prn response)
+        (is (= ["song1" "song2"] (json/parse-string (slurp (:body response)) true)))))))

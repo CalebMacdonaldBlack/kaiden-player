@@ -45,6 +45,9 @@
                                      (do (Thread/sleep 3000)
                                          (upload-song request (inc repeat-count))))))))
 
+(defn get-song-titles [_]
+  (let [list (:object-summaries (s3/list-objects cred :bucket-name "kaiden-player"))]
+    (map #(:key %) list)))
 
 (defroutes home-routes
            (GET "/" [] home-page)
@@ -52,4 +55,5 @@
            (GET "/logout" [] logout)
            (POST "/login" [] login)
            (POST "/songs" [] #(response/created (upload-song %)))
+           (GET "/songs" [] #(response/ok (get-song-titles %)))
            (GET "/test" [] (io/input-stream "test.mp3")))
