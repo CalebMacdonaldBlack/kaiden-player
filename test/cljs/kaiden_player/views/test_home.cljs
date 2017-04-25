@@ -1,6 +1,7 @@
 (ns kaiden-player.views.test-home
   (:require [com.rpl.specter :refer [select keypath walker]]
             [ajax.core :refer [GET]]
+            [pjstadig.humane-test-output]
             [cljs.test :refer-macros [is are deftest testing use-fixtures]]
             [re-frame.core :as rf]))
 
