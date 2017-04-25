@@ -160,8 +160,10 @@ test_refresh() {
 }
 
 test() {
-	echo_message "Testing code base"
+	echo_message "Testing clj"
 	lein test
+	echo_message "Tesing cljs"
+	lein with-profile test doo phantom once
 }
 
 figwheel() {

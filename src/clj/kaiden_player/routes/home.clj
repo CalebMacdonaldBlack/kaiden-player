@@ -7,7 +7,9 @@
             [ring.util.http-response :as response]
             [kaiden-player.auth :refer [logout login]]
             [clojure.java.io :as io]
-            [ring.util.codec :refer [url-encode]]))
+            [ring.util.codec :refer [url-encode]]
+            [clojure.tools.logging :as log])
+  (:import (com.amazonaws SdkClientException)))
 
 (def cred {:endpoint "ap-southeast-2"})
 
@@ -19,17 +21,30 @@
 (defn song-link [title]
   (str "/songs/" (url-encode title) ".mp3"))
 
-(defn upload-song [request]
-  (let [link (get (:params request) "link")
-        title (get (:params request) "title")
-        file-size (get (:params request) "filesize")]
-    (let [song-stream (clojure.java.io/input-stream link)]
-      (response/ok (s3/put-object cred :bucket-name "kaiden-player"
-                                  :key (str title ".mp3")
-                                  :input-stream song-stream
-                                  :metadata {:content-length (read-string file-size)}
-                                  :return-values "ALL_OLD")))
-    (song-link title)))
+(defn upload-song
+  ([request]
+   (upload-song request 1))
+  ([request repeat-count]
+   (log/debug (str "Attempt: " repeat-count))
+   (try
+     (let [link (get (:params request) "link")
+           title (get (:params request) "title")
+           file-size (get (:params request) "filesize")]
+       (log/debug (str "Uploading \nURL: " link
+                       "\nTitle: " title
+                       "\nSize: " file-size))
+       (let [song-stream (clojure.java.io/input-stream link)]
+         (response/ok (s3/put-object cred :bucket-name "kaiden-player"
+                                     :key (str title ".mp3")
+                                     :input-stream song-stream
+                                     :metadata {:content-length (read-string file-size)}
+                                     :return-values "ALL_OLD")))
+       (song-link title))
+     (catch SdkClientException e (if (> repeat-count 5)
+                                     (throw e)
+                                     (do (Thread/sleep 3000)
+                                         (upload-song request (inc repeat-count))))))))
+
 
 (defroutes home-routes
            (GET "/" [] home-page)
