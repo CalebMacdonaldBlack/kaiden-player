@@ -14,6 +14,9 @@
 (defn mock-get-song-titles [_]
   ["song1" "song2"])
 
+(defn mock-get-song [_]
+  {:mock-get-song "called"})
+
 
 (deftest test-app
   (testing "main route"
@@ -44,9 +47,15 @@
                                                      "title" "Rednex - Cotton Eye Joe"}))]
         (is (= 201 (:status response))))))
 
-  (testing "get songes"
+  (testing "get songs"
     (with-redefs [home-routes/get-song-titles mock-get-song-titles]
       (let [response ((app) (request :get "/songs"))]
         (is (= 200 (:status response)))
         (prn response)
-        (is (= ["song1" "song2"] (json/parse-string (slurp (:body response)) true)))))))
+        (is (= ["song1" "song2"] (json/parse-string (slurp (:body response)) true))))))
+
+  (testing "get song"
+    (with-redefs [home-routes/get-song mock-get-song]
+      (let [response ((app) (request :get "/songs/song1.mp3"))]
+        (is (= 200 (:status response)))
+        (is (= {:mock-get-song "called"} (json/parse-string (slurp (:body response)) true)))))))
