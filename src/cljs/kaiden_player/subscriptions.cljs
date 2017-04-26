@@ -13,9 +13,19 @@
             ["loading songs"])
         songs)))
 
+(defn- dancing-gif [db _]
+  (:dancing-gif db))
+
+(defn- music-playing [_ _]
+  (if (.getElementById js/document "player")
+    (not (.-paused (.getElementById js/document "player")))
+    false))
+
 (reg-sub :page page)
 (reg-sub :error-msg error-msg)
 (reg-sub :success-msg success-msg)
 (reg-sub :loading loading)
 (reg-sub :songs songs)
 (reg-sub :current-song current-song)
+(reg-sub :dancing-gif dancing-gif)
+(reg-sub :music-playing music-playing)

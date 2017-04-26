@@ -51,8 +51,8 @@
 
 (defn- play-song [_ _]
   (do
-    (.load (.getElementById js/document "player"))
-    (.play (.getElementById js/document "player")))
+    (rf/dispatch [:get-dancing-gif])
+    (.load (.getElementById js/document "player")))
   {})
 
 
@@ -60,6 +60,19 @@
   [cofx [_ song]]
   {:db (assoc (:db cofx) :current-song song)
    :dispatch [:play-song]})
+
+(defn- get-dancing-gif [_ _]
+  (GET "http://api.giphy.com/v1/gifs/search?q=dancing+cartoon&limit=100&api_key=dc6zaTOxFJmzC"
+       {:handler (fn [response]
+                   (let [data (get response "data")
+                         index (rand-int (count data))
+                         img-src (get-in data [index "images" "fixed_height" "url"])]
+                     (rf/dispatch [:update-dancing-gif img-src])))})
+  {})
+
+(defn- update-dancing-gif
+  [cofx [_ src]]
+  {:db (assoc (:db cofx) :dancing-gif src)})
 
 (reg-event-db
   :initialize-db
@@ -100,3 +113,11 @@
 (reg-event-fx
   :play-song
   play-song)
+
+(reg-event-fx
+  :get-dancing-gif
+  get-dancing-gif)
+
+(reg-event-fx
+  :update-dancing-gif
+  update-dancing-gif)
