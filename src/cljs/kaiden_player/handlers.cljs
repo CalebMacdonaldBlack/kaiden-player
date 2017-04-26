@@ -46,12 +46,14 @@
         index (inc (.indexOf songs current-song))]
     {:db (if (= index (count songs))
            (assoc db :current-song (first songs))
-           (assoc db :current-song (nth songs index)))
+           (do (prn (str "settings song" (nth songs index)))
+               (assoc db :current-song (nth songs index))))
      :dispatch [:play-song]}))
 
 (defn- play-song [cofx _]
   (do
     (rf/dispatch [:get-dancing-gif])
+    (set! (.-src (.getElementById js/document "player-source")) (str "/songs/"(js/encodeURIComponent (get-in cofx [:db :current-song]))))
     (.load (.getElementById js/document "player")))
   {:db (assoc (:db cofx) :music-playing true)})
 

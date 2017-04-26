@@ -63,7 +63,7 @@
                     :on-loaded-data #(.play (.getElementById js/document "player"))
                     :on-play #(rf/dispatch [:set-music-playing true])
                     :on-pause #(rf/dispatch [:set-music-playing false])}
-     [:source {:src (str "/songs/"(js/encodeURIComponent current-song)) :type "audio/mpeg"}]]))
+     [:source#player-source {:type "audio/mpeg"}]]))
 
 (defn home-page []
   [:div.ui.grid
