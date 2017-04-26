@@ -63,13 +63,15 @@
   {:db (assoc (:db cofx) :current-song song)
    :dispatch [:play-song]})
 
+(defn- parse-giphy-response [response]
+  (let [data (get response "data")
+        index (rand-int (count data))]
+    (get-in data [index "images" "fixed_height" "url"])))
+
 (defn- get-dancing-gif [_ _]
   (GET "http://api.giphy.com/v1/gifs/search?q=dancing+cartoon&limit=100&api_key=dc6zaTOxFJmzC"
-       {:handler (fn [response]
-                   (let [data (get response "data")
-                         index (rand-int (count data))
-                         img-src (get-in data [index "images" "fixed_height" "url"])]
-                     (rf/dispatch [:update-dancing-gif img-src])))})
+       {:handler #(rf/dispatch [:update-dancing-gif (parse-giphy-response %)])})
+
   {})
 
 (defn- update-dancing-gif

@@ -69,4 +69,23 @@
           song "song.mp3"
           output (set-current-song {:db {}} [nil song])]
       (is (= song (get-in output [:db :current-song])))
-      (is (= :play-song (get-in output [:dispatch 0]))))))
+      (is (= :play-song (get-in output [:dispatch 0])))))
+
+  (testing "update-dancing-gif"
+    (let [update-dancing-gif #'kaiden-player.handlers/update-dancing-gif
+          src "giffy.gif"
+          output (update-dancing-gif {:db {}} [nil src])]
+      (is (= src (get-in output [:db :dancing-gif])))))
+
+  (testing "get-dancing-gif"
+    (with-redefs [ajax.core/GET #(is (and (string? %1) (map? %2)))]
+      (let [get-dancing-gif #'kaiden-player.handlers/get-dancing-gif]
+        (get-dancing-gif nil nil))))
+
+  (testing "parse-giphy-response"
+    (with-redefs [rand-int (fn [_] 0)]
+      (let [parse-giphy-response #'kaiden-player.handlers/parse-giphy-response
+            url "my-giphy.gif"
+            response {"data" [{"images" {"fixed_height" {"url" url}}}]}
+            output (parse-giphy-response response)]
+        (is (= url output))))))
