@@ -62,5 +62,11 @@
     (let [update-songs #'kaiden-player.handlers/update-songs
           songs ["Song1" "Song2"]
           output (update-songs {} [nil songs])]
-      (is (= (:songs output) songs)))))
+      (is (= (:songs output) songs))))
 
+  (testing "set-current-song"
+    (let [set-current-song #'kaiden-player.handlers/set-current-song
+          song "song.mp3"
+          output (set-current-song {:db {}} [nil song])]
+      (is (= song (get-in output [:db :current-song])))
+      (is (= :play-song (get-in output [:dispatch 0]))))))
