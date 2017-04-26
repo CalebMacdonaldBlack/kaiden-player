@@ -11,6 +11,12 @@
     (is (= expected-request (:params request)))
     nil))
 
+(defn- mock-get
+  [expected-endpoint]
+  (fn [endpoint m]
+    (is (= endpoint expected-endpoint))
+    (is (map? m))))
+
 (deftest handlers
   (testing "test-set-active-page"
     (let [set-active-page #'kaiden-player.handlers/set-active-page
@@ -45,4 +51,9 @@
           db (song-uploaded-successfully db [nil {"title" "test"}])]
       (is (not (:loading db)))
       (is (not (:error-msg db)))
-      (is (= (:success-msg db) "test.mp3 was uploaded successfully")))))
+      (is (= (:success-msg db) "test.mp3 was uploaded successfully"))))
+
+  (testing "load-songs"
+    (let [load-songs #'kaiden-player.handlers/load-songs]
+      (with-redefs [ajax.core/GET (mock-get "/songs")]
+        (is (map? (load-songs nil nil)))))))
