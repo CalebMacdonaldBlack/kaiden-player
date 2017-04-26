@@ -56,4 +56,11 @@
   (testing "load-songs"
     (let [load-songs #'kaiden-player.handlers/load-songs]
       (with-redefs [ajax.core/GET (mock-get "/songs")]
-        (is (map? (load-songs nil nil)))))))
+        (is (map? (load-songs nil nil))))))
+
+  (testing "update-songs"
+    (let [update-songs #'kaiden-player.handlers/update-songs
+          songs ["Song1" "Song2"]
+          output (update-songs {} [nil songs])]
+      (is (= (:songs output) songs)))))
+
