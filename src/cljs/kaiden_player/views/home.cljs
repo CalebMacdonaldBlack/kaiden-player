@@ -60,7 +60,9 @@
   (let [current-song @(rf/subscribe [:current-song])]
     [:audio#player {:controls true
                     :on-ended #(rf/dispatch [:next-song current-song])
-                    :on-loaded-data #(.play (.getElementById js/document "player"))}
+                    :on-loaded-data #(.play (.getElementById js/document "player"))
+                    :on-play #(rf/dispatch [:set-music-playing true])
+                    :on-pause #(rf/dispatch [:set-music-playing false])}
      [:source {:src (str "/songs/"(js/encodeURIComponent current-song)) :type "audio/mpeg"}]]))
 
 (defn home-page []
@@ -83,7 +85,7 @@
     (music-player)
     [:br]
     [:br]
-    (when true
+    (when @(rf/subscribe [:music-playing])
       [:img {:src @(rf/subscribe [:dancing-gif]) :style {:borderRadius "1em"}}])
     (let [current-song @(rf/subscribe [:current-song])]
       (when current-song

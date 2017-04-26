@@ -49,11 +49,11 @@
            (assoc db :current-song (nth songs index)))
      :dispatch [:play-song]}))
 
-(defn- play-song [_ _]
+(defn- play-song [cofx _]
   (do
     (rf/dispatch [:get-dancing-gif])
     (.load (.getElementById js/document "player")))
-  {})
+  {:db (assoc (:db cofx) :music-playing true)})
 
 
 (defn- set-current-song
@@ -73,6 +73,10 @@
 (defn- update-dancing-gif
   [cofx [_ src]]
   {:db (assoc (:db cofx) :dancing-gif src)})
+
+(defn- set-music-playing
+  [cofx [_ playing?]]
+  {:db (assoc (:db cofx) :music-playing playing?)})
 
 (reg-event-db
   :initialize-db
@@ -121,3 +125,7 @@
 (reg-event-fx
   :update-dancing-gif
   update-dancing-gif)
+
+(reg-event-fx
+  :set-music-playing
+  set-music-playing)

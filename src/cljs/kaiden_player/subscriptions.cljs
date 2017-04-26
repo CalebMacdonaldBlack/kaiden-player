@@ -16,10 +16,8 @@
 (defn- dancing-gif [db _]
   (:dancing-gif db))
 
-(defn- music-playing [_ _]
-  (if (.getElementById js/document "player")
-    (not (.-paused (.getElementById js/document "player")))
-    false))
+(defn- music-playing [db _]
+  (:music-playing db))
 
 (reg-sub :page page)
 (reg-sub :error-msg error-msg)
