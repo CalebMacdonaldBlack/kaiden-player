@@ -88,4 +88,10 @@
             url "my-giphy.gif"
             response {"data" [{"images" {"fixed_height" {"url" url}}}]}
             output (parse-giphy-response response)]
-        (is (= url output))))))
+        (is (= url output)))))
+
+  (testing "set-music-playing"
+    (let [set-music-playing #'kaiden-player.handlers/set-music-playing
+          cofx {:db {:music-playing false}}
+          output (set-music-playing cofx [nil true])]
+      (is (get-in output [:db :music-playing])))))
