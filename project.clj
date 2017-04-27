@@ -3,7 +3,9 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
 
-  :dependencies [[amazonica "0.3.95"]
+  :dependencies [[com.cemerick/piggieback "0.2.1"]
+                 [org.clojure/tools.nrepl "0.2.10"]
+                 [amazonica "0.3.95"]
                  [buddy "1.3.0"]
                  [cljs-ajax "0.5.8" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [com.google.guava/guava "21.0"]
@@ -53,6 +55,7 @@
   :plugins [[lein-cprop "1.0.1"]
             [migratus-lein "0.4.4"]
             [lein-cljsbuild "1.1.5"]
+            [cider/cider-nrepl "0.14.0"]
             [lein-immutant "2.1.0"]
             [lein-kibit "0.1.2"]
             [lein-cloverage "1.0.9"]]
@@ -89,7 +92,9 @@
    :dev           [:project/dev :profiles/dev]
    :test          [:project/dev :project/test :profiles/test]
 
-   :project/dev  {:dependencies [[prone "1.1.4"]
+   :project/dev  {:dependencies [[com.cemerick/piggieback "0.2.1"]
+                                 [org.clojure/tools.nrepl "0.2.10"]
+                                 [prone "1.1.4"]
                                  [ring/ring-mock "0.3.0"]
                                  [ring/ring-devel "1.5.1"]
                                  [pjstadig/humane-test-output "0.8.1"]
@@ -97,7 +102,8 @@
                                  [com.cemerick/piggieback "0.2.2-SNAPSHOT"]
                                  [doo "0.1.7"]
                                  [figwheel-sidecar "0.5.9"]]
-                  :plugins      [[com.jakemccrary/lein-test-refresh "0.19.0"]
+                  :plugins      [[cider/cider-nrepl "0.14.0"]
+                                 [com.jakemccrary/lein-test-refresh "0.19.0"]                                 
                                  [lein-doo "0.1.7"]
                                  [lein-figwheel "0.5.9"]
                                  [org.clojure/clojurescript "1.9.495"]]
@@ -119,7 +125,7 @@
                   :doo {:build "test"}
                   :source-paths ["env/dev/clj"]
                   :resource-paths ["env/dev/resources"]
-                  :repl-options {:init-ns user}
+                  :repl-options {:nrepl-middleware [cemerick.piggieback/wrap-cljs-repl]}
                   :injections [(require 'pjstadig.humane-test-output)
                                (pjstadig.humane-test-output/activate!)]}
    :project/test {:resource-paths ["env/test/resources"]
