@@ -56,6 +56,9 @@
        [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
             (remove-mp3-suffix song)]])]])
 
+(defn shuffle-button []
+  [:button.ui.button {:on-click #(rf/dispatch [:shuffle-songs])} "Shuffle"])
+  
 (defn music-player []
   (let [current-song @(rf/subscribe [:current-song])]
     [:audio#player {:controls true
@@ -64,6 +67,7 @@
                     :on-play #(rf/dispatch [:set-music-playing true])
                     :on-pause #(rf/dispatch [:set-music-playing false])}
      [:source#player-source {:type "audio/mpeg"}]]))
+
 
 (defn home-page []
   [:div.ui.grid
@@ -83,6 +87,9 @@
    [:div.twelve.wide.column
     [:h1 "Player"]
     (music-player)
+    [:br]
+    [:br]
+    (shuffle-button)
     [:br]
     [:br]
     (when @(rf/subscribe [:music-playing])
