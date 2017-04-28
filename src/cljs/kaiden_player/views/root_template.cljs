@@ -11,7 +11,7 @@
      {:class (when (= page @selected-page) "active")
       :href uri}
      title]))
-
+     
 (defn navbar []
   [:div.ui.menu
    [:div.header.item "Kaiden Player"]

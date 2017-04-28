@@ -82,6 +82,10 @@
   [cofx [_ playing?]]
   {:db (assoc (:db cofx) :music-playing playing?)})
 
+(defn shuffle-songs
+  [cofx _]
+  {:db (assoc (:db cofx) :songs (shuffle (:songs (:db cofx))))})
+
 (reg-event-db
   :initialize-db
   init-db)
@@ -133,3 +137,8 @@
 (reg-event-fx
   :set-music-playing
   set-music-playing)
+
+(reg-event-fx
+ :shuffle-songs
+ shuffle-songs)
+

@@ -65,6 +65,9 @@
                     :on-pause #(rf/dispatch [:set-music-playing false])}
      [:source#player-source {:type "audio/mpeg"}]]))
 
+(defn shuffle-button []
+  [:button.ui.button {:on-click #(rf/dispatch [:shuffle-songs])} "Shuffle"])
+
 (defn home-page []
   [:div.ui.grid
    [:div.four.wide.column]
@@ -83,6 +86,9 @@
    [:div.twelve.wide.column
     [:h1 "Player"]
     (music-player)
+    [:br]
+    [:br]
+    (shuffle-button)
     [:br]
     [:br]
     (when @(rf/subscribe [:music-playing])
