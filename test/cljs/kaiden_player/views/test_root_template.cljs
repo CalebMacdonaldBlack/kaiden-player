@@ -34,7 +34,7 @@
 
   (testing "navbar"
     (with-redefs [rf/subscribe mock-subscribe]
-                 (let [expected [:div.ui.menu
+                 (let [expected [:div.ui.menu.inverted
                                  [:div.header.item "Kaiden Player"]
                                  [:a.item {:class "active", :href "#/"} "Home"]
                                  [:div.right.menu [:a.item {:href "/logout"} "Logout"]]]
@@ -45,8 +45,9 @@
                   navbar [:nav]
                   rf/subscribe mock-subscribe]
                  (let [expected [:div
-                                 [[:nav]]
-                                 [#'kaiden-player.views.test-root-template/mock-page]]
+                                  {:style {:background-color "#3D3D3D"}}
+                                  [[:nav]]
+                                  [#'kaiden-player.views.test-root-template/mock-page]]
                        actual (page)]
                    (is (= expected actual))))))
 

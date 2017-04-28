@@ -80,4 +80,4 @@
   (testing "remove-mp3-suffix"
     (let [remove-mp3-suffix #'kaiden-player.views.home/remove-mp3-suffix
           output (remove-mp3-suffix "songname.mp3")]
-         (is (= output "songname!")))))
+         (is (= output "songname")))))
