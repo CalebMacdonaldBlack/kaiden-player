@@ -15,4 +15,4 @@ RUN apk --update upgrade && \
     rm -rf /usr/src/app/
 
 EXPOSE 3000
-ENTRYPOINT /usr/bin/java -jar /kaiden-player/app.jar migrate && /usr/bin/java -jar /kaiden-player/app.jar
+ENTRYPOINT /usr/bin/java -jar /kaiden-player/app.jar
