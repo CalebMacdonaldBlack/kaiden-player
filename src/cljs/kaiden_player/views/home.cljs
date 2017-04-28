@@ -46,7 +46,7 @@
      [:small {:style {:color "green"}} @success-msg])])
 
 (defn list-songs []
-  [:table.ui.celled.striped.table
+  [:table.ui.celled.striped.table.inverted
    [:thead
     [:tr
      [:th "Songs"]]]
@@ -77,7 +77,7 @@
          loading (rf/subscribe [:loading])]
      [:div.eight.wide.column
       [:form.ui.form
-       [:h1.ui.center.aligned.header "Add Song to Playlist"]
+       [:h1.ui.center.aligned.header.inverted "Add Song to Playlist"]
        [:div.ui.action.input {:style {:width "90%"}}
         (url-input loading url)
         (submit-button loading url mp3-api-endpoint)]]
@@ -85,7 +85,7 @@
    [:div.four.wide.column]
    [:div.two.wide.column]
    [:div.twelve.wide.column
-    [:h1 "Player"]
+    [:h1.ui.header.inverted "Player"]
     (music-player)
     [:br]
     [:br]
@@ -96,6 +96,6 @@
       [:img {:src @(rf/subscribe [:dancing-gif]) :style {:borderRadius "1em"}}])
     (let [current-song @(rf/subscribe [:current-song])]
       (when current-song
-        [:h2 "Currently playing: " [:em [:small {:style {:color "#555" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
+        [:h2.ui.header.inverted "Currently playing: " [:em [:small {:style {:color "#555" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
     (list-songs)]
    [:div.two.wide.column]])
