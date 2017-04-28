@@ -90,6 +90,7 @@
     [:br]
     [:br]
     (shuffle-button)
+    [:button.ui.button {:on-click #(rf/dispatch [:next-song @(rf/subscribe [:current-song])])} "Skip"]
     [:br]
     [:br]
     (when @(rf/subscribe [:music-playing])

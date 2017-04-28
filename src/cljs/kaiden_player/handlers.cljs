@@ -44,6 +44,7 @@
   (let [db (:db cofx)
         songs (:songs db)
         index (inc (.indexOf songs current-song))]
+    (prn (str "Before Song: " current-song " After Song: " (nth songs index) " Index of current: " (.indexOf songs current-song) " Index of next: " (inc (.indexOf songs current-song))))
     {:db (if (= index (count songs))
            (assoc db :current-song (first songs))
            (do (prn (str "settings song" (nth songs index)))
@@ -52,6 +53,7 @@
 
 (defn- play-song [cofx _]
   (do
+    (prn (str "Playing song: " (get-in cofx [:db :current-song])))
     (rf/dispatch [:get-dancing-gif])
     (set! (.-src (.getElementById js/document "player-source")) (str "/songs/"(js/encodeURIComponent (get-in cofx [:db :current-song]))))
     (.load (.getElementById js/document "player")))
