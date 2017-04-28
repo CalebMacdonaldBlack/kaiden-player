@@ -55,6 +55,7 @@
   (do
     (prn (str "Playing song: " (get-in cofx [:db :current-song])))
     (rf/dispatch [:get-dancing-gif])
+    (aset js/document "title" (get-in cofx [:db :current-song]))
     (set! (.-src (.getElementById js/document "player-source")) (str "/songs/"(js/encodeURIComponent (get-in cofx [:db :current-song]))))
     (.load (.getElementById js/document "player")))
   {:db (assoc (:db cofx) :music-playing true)})
@@ -71,7 +72,7 @@
     (get-in data [index "images" "fixed_height" "url"])))
 
 (defn- get-dancing-gif [_ _]
-  (GET "http://api.giphy.com/v1/gifs/search?q=dancing+cartoon&limit=100&api_key=dc6zaTOxFJmzC"
+  (GET (str "http://api.giphy.com/v1/gifs/search?q=dancing+cartoon&limit=100&api_key=dc6zaTOxFJmzC&offset=" (rand-int 100))
        {:handler #(rf/dispatch [:update-dancing-gif (parse-giphy-response %)])})
 
   {})

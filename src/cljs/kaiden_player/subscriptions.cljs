@@ -19,6 +19,15 @@
 (defn- music-playing [db _]
   (:music-playing db))
 
+(defn- rotate [v n]
+  (let [cv (count v), n (mod n cv)]
+    (concat (subvec v n cv) (subvec v 0 n))))
+
+(defn- rotated-songs [db _]
+  (let [current-song (:current-song db)
+        songs (:songs db)
+        index (.indexOf songs current-song)]
+    (rotate songs index)))
 (reg-sub :page page)
 (reg-sub :error-msg error-msg)
 (reg-sub :success-msg success-msg)
@@ -27,3 +36,4 @@
 (reg-sub :current-song current-song)
 (reg-sub :dancing-gif dancing-gif)
 (reg-sub :music-playing music-playing)
+(reg-sub :rotated-songs rotated-songs)

@@ -46,12 +46,12 @@
      [:small {:style {:color "green"}} @success-msg])])
 
 (defn list-songs []
-  [:table.ui.celled.striped.table.inverted
+  [:table.ui.celled.striped.table.inverted.selectable
    [:thead
     [:tr
      [:th "Songs"]]]
    [:tbody
-    (for [song @(rf/subscribe [:songs])]
+    (for [song @(rf/subscribe [:rotated-songs])]
       [:tr
        [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
             (remove-mp3-suffix song)]])]])
@@ -97,6 +97,6 @@
       [:img {:src @(rf/subscribe [:dancing-gif]) :style {:borderRadius "1em"}}])
     (let [current-song @(rf/subscribe [:current-song])]
       (when current-song
-        [:h2.ui.header.inverted "Currently playing: " [:em [:small {:style {:color "#555" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
+        [:h2.ui.header.inverted "Currently playing: " [:em [:small {:style {:color "#aaa" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
     (list-songs)]
    [:div.two.wide.column]])
