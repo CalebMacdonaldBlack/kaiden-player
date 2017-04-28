@@ -23,9 +23,8 @@
   (let [cv (count v), n (mod n cv)]
     (concat (subvec v n cv) (subvec v 0 n))))
 
-(defn- rotated-songs [db _]
+(defn- rotated-songs [db [_ songs]]
   (let [current-song (:current-song db)
-        songs (:songs db)
         index (.indexOf songs current-song)]
     (rotate songs index)))
 (reg-sub :page page)
