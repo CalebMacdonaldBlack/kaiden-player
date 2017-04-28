@@ -3,7 +3,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY project.clj /usr/src/app/
 RUN lein deps
-RUN npm install -g phantomjs
+RUN npm install -g phantom
 
 RUN mkdir -p /kaiden-player
 

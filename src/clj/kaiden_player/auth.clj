@@ -16,6 +16,7 @@
   (:next (:query-params request)). On failed
   authentication, renders the login page."
   [request]
+  (prn request)
   (let [email (get-in request [:form-params "email"])
         password (get-in request [:form-params "password"])
         session (:session request)
