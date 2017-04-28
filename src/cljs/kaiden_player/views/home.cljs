@@ -51,7 +51,7 @@
     [:tr
      [:th "Songs"]]]
    [:tbody
-    (for [song @(rf/subscribe [:rotated-songs])]
+    (for [song @(rf/subscribe [:rotated-songs @(rf/subscribe [:songs])])]
       [:tr
        [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
             (remove-mp3-suffix song)]])]])
