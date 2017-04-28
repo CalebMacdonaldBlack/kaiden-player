@@ -40,9 +40,10 @@
   (GET "/songs" {:handler #(rf/dispatch [:update-songs %])})
   {})
 
-(defn- next-song [cofx [_ current-song]]
+(defn- next-song [cofx _]
   (let [db (:db cofx)
         songs (:songs db)
+        current-song (:current-song db)
         index (inc (.indexOf songs current-song))]
     (prn (str "Before Song: " current-song " After Song: " (nth songs index) " Index of current: " (.indexOf songs current-song) " Index of next: " (inc (.indexOf songs current-song))))
     {:db (if (= index (count songs))

@@ -62,7 +62,7 @@
 (defn music-player []
   (let [current-song @(rf/subscribe [:current-song])]
     [:audio#player {:controls true
-                    :on-ended #(rf/dispatch [:next-song current-song])
+                    :on-ended #(rf/dispatch [:next-song])
                     :on-loaded-data #(.play (.getElementById js/document "player"))
                     :on-play #(rf/dispatch [:set-music-playing true])
                     :on-pause #(rf/dispatch [:set-music-playing false])}
@@ -90,7 +90,7 @@
     [:br]
     [:br]
     (shuffle-button)
-    [:button.ui.button {:on-click #(rf/dispatch [:next-song @(rf/subscribe [:current-song])])} "Skip"]
+    [:button.ui.button {:on-click #(rf/dispatch [:next-song])} "Skip"]
     [:br]
     [:br]
     (when @(rf/subscribe [:music-playing])
