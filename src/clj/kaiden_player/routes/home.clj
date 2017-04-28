@@ -47,7 +47,7 @@
 
 (defn get-song-titles [_]
   (let [list (:object-summaries (s3/list-objects cred :bucket-name "kaiden-player"))]
-    (map #(:key %) list)))
+    (map :key list)))
 
 (defn get-song [request]
   (let [title (get-in request [:params :title])]
