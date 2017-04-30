@@ -13,4 +13,7 @@ profiles.clj
 *.iml
 .idea
 .envrc
-
+figwheel_server.log
+node_modules
+out
+doo-index.html

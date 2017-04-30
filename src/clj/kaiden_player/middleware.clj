@@ -1,14 +1,20 @@
 (ns kaiden-player.middleware
   (:require [kaiden-player.env :refer [defaults]]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [buddy.auth.backends.session :refer [session-backend]]
+            [buddy.auth.backends :as backends]
+            [buddy.auth :refer [authenticated?]]
             [clojure.tools.logging :as log]
             [kaiden-player.layout :refer [*app-context* error-page]]
-            [ring.middleware.anti-forgery :refer [wrap-anti-forgery]]
             [ring.middleware.webjars :refer [wrap-webjars]]
+            [ring.util.response :refer [response redirect content-type]]
             [muuntaja.middleware :refer [wrap-format wrap-params]]
             [kaiden-player.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
+            [kaiden-player.layout :as layout]
             [immutant.web.middleware :refer [wrap-session]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]])
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
+            [clojure.java.io :as io])
   (:import [javax.servlet ServletContext]))
 
 (defn wrap-context [handler]
@@ -36,14 +42,6 @@
                      :title "Something very bad has happened!"
                      :message "We've dispatched a team of highly trained gnomes to take care of the problem."})))))
 
-(defn wrap-csrf [handler]
-  (wrap-anti-forgery
-    handler
-    {:error-response
-     (error-page
-       {:status 403
-        :title "Invalid anti-forgery token"})}))
-
 (defn wrap-formats [handler]
   (let [wrapped (-> handler wrap-params wrap-format)]
     (fn [request]
@@ -51,8 +49,11 @@
       ;; since they're not compatible with this middleware
       ((if (:websocket? request) handler wrapped) request))))
 
+(def auth-backend (session-backend))
+
 (defn wrap-base [handler]
   (-> ((:middleware defaults) handler)
+      (wrap-authentication auth-backend)
       wrap-webjars
       wrap-flash
       (wrap-session {:cookie-attrs {:http-only true}})
