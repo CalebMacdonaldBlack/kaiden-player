@@ -57,7 +57,7 @@
             (remove-mp3-suffix song)]])]])
 
 (defn shuffle-button []
-  [:button.ui.button {:on-click #(rf/dispatch [:shuffle-songs])} "Shuffle"])
+  [:button.ui.left.attached.button {:on-click #(rf/dispatch [:shuffle-songs])} "Shuffle"])
   
 (defn music-player []
   (let [current-song @(rf/subscribe [:current-song])]
@@ -85,18 +85,18 @@
    [:div.four.wide.column]
    [:div.two.wide.column]
    [:div.twelve.wide.column
-    [:h1.ui.header.inverted "Player"]
-    (music-player)
-    [:br]
-    [:br]
-    (shuffle-button)
-    [:button.ui.button {:on-click #(rf/dispatch [:next-song])} "Skip"]
-    [:br]
     [:br]
     (when @(rf/subscribe [:music-playing])
-      [:img {:src @(rf/subscribe [:dancing-gif]) :style {:borderRadius "1em"}}])
+      [:img.gif {:src @(rf/subscribe [:dancing-gif]) :style {:borderRadius "1em"}}])
     (let [current-song @(rf/subscribe [:current-song])]
       (when current-song
         [:h2.ui.header.inverted "Currently playing: " [:em [:small {:style {:color "#aaa" :font-weight "100"}} (remove-mp3-suffix @(rf/subscribe [:current-song]))]]]))
+    [:div.ui.grid
+      [:div.twelve.wide.column
+        (music-player)]
+      [:div.four.wide.column
+        (shuffle-button)
+        [:button.ui.right.attached.button {:on-click #(rf/dispatch [:next-song])} "Skip"]]]
+        
     (list-songs)]
    [:div.two.wide.column]])
