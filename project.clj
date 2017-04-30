@@ -78,7 +78,7 @@
                 :compiler
                 {:output-to "target/cljsbuild/public/js/app.js"
                  :optimizations :advanced
-                 :pretty-print false
+                 :pretty-print true
                  :closure-warnings
                  {:externs-validation :off :non-standard-jsdoc :off}
                  :externs ["react/externs/react.js"]}}}}
