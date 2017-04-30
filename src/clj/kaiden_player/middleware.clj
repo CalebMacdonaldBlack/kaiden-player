@@ -8,6 +8,7 @@
             [kaiden-player.layout :refer [*app-context* error-page]]
             [ring.middleware.webjars :refer [wrap-webjars]]
             [ring.util.response :refer [response redirect content-type]]
+            [ring.util.http-response :as response]
             [muuntaja.middleware :refer [wrap-format wrap-params]]
             [kaiden-player.config :refer [env]]
             [ring.middleware.flash :refer [wrap-flash]]
@@ -38,9 +39,11 @@
       (handler req)
       (catch Throwable t
         (log/error t)
-        (error-page {:status 500
-                     :title "Something very bad has happened!"
-                     :message "We've dispatched a team of highly trained gnomes to take care of the problem."})))))
+        (prn t)
+        (response/internal-server-error {:status 500
+                                         :title "Something very bad has happened!"
+                                         :message t
+                                         :stack-trace (str t)})))))
 
 (defn wrap-formats [handler]
   (let [wrapped (-> handler wrap-params wrap-format)]
