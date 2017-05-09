@@ -10,7 +10,7 @@
   (case (first coll)
     :error-msg (atom error-msg)
     :loading (atom loading)
-    :success-msg (atom success-msg)))
+    :success-msg (atom success-msg))) 
 
 (deftest test-home-view
   (let [url-input #'kaiden-player.views.home/url-input]
