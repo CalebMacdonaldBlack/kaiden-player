@@ -14,7 +14,8 @@
 (defn- add-song
   [db [_ song-data]]
   (POST "/songs" {:params  song-data
-                  :handler #(rf/dispatch [:song-uploaded-successfully song-data])})
+                  :handler #(rf/dispatch [:song-uploaded-successfully song-data])
+                  :error-handler #(rf/dispatch [:song-uploaded-unsuccessfully])})
   (-> db
       (assoc :loading true)
       (dissoc :error-msg)
@@ -25,12 +26,25 @@
       (dissoc :success-msg)
       (assoc :error-msg "Song was not found at that link!")))
 
-(defn- song-uploaded-successfully [db [_ response]]
-  (-> db
-      (dissoc :loading)
-      (dissoc :error-msg)
-      (dissoc :songs)
-      (assoc :success-msg (str (get response "title") ".mp3 was uploaded successfully"))))
+(defn- song-uploaded-successfully [cofx [_ response]]
+  (let [db (:db cofx)
+        msg (str (get response "title") ".mp3 was uploaded successfully")]
+    (prn msg)
+    (prn cofx)
+    {:db (-> db
+          (dissoc :loading)
+          (dissoc :error-msg)
+          (dissoc :songs)
+          (assoc :success-msg msg))
+     :dispatch [:notify-success msg]}))
+
+(defn- song-uploaded-unsuccessfully [cofx _]
+  (let [db (:db cofx)
+        msg "Error uploading song"]
+    {:db (-> db
+            (dissoc :loading)
+            (assoc :error-msg msg)) 
+     :dispatch [:notify-error msg]})) 
 
 (defn- update-songs
   [db [_ songs]]
@@ -89,7 +103,17 @@
 (defn shuffle-songs
   [cofx _]
   {:db (assoc (:db cofx) :songs (shuffle (:songs (:db cofx))))})
+
+(defn notify-error
+  [cofx [_ msg]]
+  (js/Notification. "Error" (cljs.core/clj->js {"body" msg "icon" "/img/error.png"}))
+  {})
   
+(defn notify-success
+  [cofx [_ msg]]
+  (js/Notification. "Success" (cljs.core/clj->js {"body" msg "icon" "/img/success.png"}))
+  {})
+
 (reg-event-db
   :initialize-db
   init-db)
@@ -106,7 +130,7 @@
   :song-not-found
   song-not-found)
 
-(reg-event-db
+(reg-event-fx
   :song-uploaded-successfully
   song-uploaded-successfully)
 
@@ -145,3 +169,15 @@
 (reg-event-fx
  :shuffle-songs
  shuffle-songs)
+
+(reg-event-fx
+  :song-uploaded-unsuccessfully
+  song-uploaded-unsuccessfully)
+
+(reg-event-fx
+  :notify-error
+  notify-error)
+
+(reg-event-fx
+  :notify-success
+  notify-success)

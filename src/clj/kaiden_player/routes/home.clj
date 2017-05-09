@@ -27,6 +27,7 @@
   ([request repeat-count]
    (log/debug (str "Attempt: " repeat-count))
    (try
+     (throw "error")
      (let [link (get (:params request) "link")
            title (get (:params request) "title")
            file-size (get (:params request) "filesize")]
