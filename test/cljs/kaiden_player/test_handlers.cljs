@@ -48,7 +48,8 @@
   (testing "song-uploaded-successfully"
     (let [song-uploaded-successfully #'kaiden-player.handlers/song-uploaded-successfully
           db {:loading true :error-msg "test"}
-          db (song-uploaded-successfully db [nil {"title" "test"}])]
+          output (song-uploaded-successfully {:db db} [nil {"title" "test"}])
+          db (:db output)] 
       (is (not (:loading db)))
       (is (not (:error-msg db)))
       (is (= (:success-msg db) "test.mp3 was uploaded successfully"))))
