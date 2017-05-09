@@ -54,6 +54,14 @@
       (is (not (:error-msg db)))
       (is (= (:success-msg db) "test.mp3 was uploaded successfully"))))
 
+  (testing "song-uploaded-unsuccessfully"
+    (let [song-uploaded-unsuccessfully #'kaiden-player.handlers/song-uploaded-unsuccessfully
+          cofx {:db {:loading true}}
+          cofx (song-uploaded-unsuccessfully cofx)
+          db (:db cofx)]
+      (is (not (:loading db)))
+      (is (= (:error-msg db) "Error uploading song")))) 
+
   (testing "load-songs"
     (let [load-songs #'kaiden-player.handlers/load-songs]
       (with-redefs [ajax.core/GET (mock-get "/songs")]
