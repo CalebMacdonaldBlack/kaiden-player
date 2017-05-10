@@ -52,9 +52,9 @@
      [:th "Songs"]]]
    [:tbody
     (for [song @(rf/subscribe [:rotated-songs @(rf/subscribe [:songs])])]
-      [:tr
-       [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
-            (remove-mp3-suffix song)]])]])
+      ^{:key song} [:tr
+                    [:td {:on-click #(do (rf/dispatch [:set-current-song song]))}
+                         (remove-mp3-suffix song)]])]])
 
 (defn shuffle-button []
   [:button.ui.left.attached.button {:on-click #(rf/dispatch [:shuffle-songs])} "Shuffle"])
