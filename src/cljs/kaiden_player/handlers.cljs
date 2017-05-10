@@ -59,7 +59,7 @@
         songs (:songs db)
         current-song (:current-song db)
         index (inc (.indexOf songs current-song))]
-    (prn (str "Before Song: " current-song " After Song: " (nth songs index) " Index of current: " (.indexOf songs current-song) " Index of next: " (inc (.indexOf songs current-song))))
+    ; (prn (str "Before Song: " current-song " After Song: " (nth songs index) " Index of current: " (.indexOf songs current-song) " Index of next: " (inc (.indexOf songs current-song))))
     {:db (if (= index (count songs))
            (assoc db :current-song (first songs))
            (do (prn (str "settings song" (nth songs index)))
