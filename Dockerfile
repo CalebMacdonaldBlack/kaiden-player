@@ -14,5 +14,5 @@ RUN apk --update upgrade && \
     mv /usr/src/app/target/uberjar/kaiden-player.jar /kaiden-player/app.jar && \
     rm -rf /usr/src/app/
 
-EXPOSE 3000
+EXPOSE 1337
 ENTRYPOINT /usr/bin/java -jar /kaiden-player/app.jar
