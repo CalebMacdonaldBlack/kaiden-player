@@ -77,7 +77,7 @@
          loading (rf/subscribe [:loading])]
      [:div.eight.wide.column
       [:form.ui.form
-       [:h1.ui.center.aligned.header.inverted "Add Song to Playlist!!"]
+       [:h1.ui.center.aligned.header.inverted "Add Song to Playlist"]
        [:div.ui.action.input {:style {:width "90%"}}
         (url-input loading url)
         (submit-button loading url mp3-api-endpoint)]]
