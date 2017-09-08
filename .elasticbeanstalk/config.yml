@@ -1,0 +1,10 @@
+branch-defaults:
+  master:
+    environment: production-env
+global:
+  application_name: kaiden-player
+  default_ec2_keyname: Production
+  default_platform: 64bit Amazon Linux 2017.03 v4.2.0 running Node.js
+  default_region: ap-southeast-2
+  profile: eb-cli
+  sc: git

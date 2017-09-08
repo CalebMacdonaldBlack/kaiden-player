@@ -3,9 +3,18 @@ machine:
     version: 6.1.0
 dependencies:
   pre:
+    - pip install awsebcli
     - npm install -g phantomjs
 test:
   override:
     - lein kibit
     - lein trampoline test
     - lein with-profile test doo phantom once
+deployment:
+  production:
+    branch: master
+    commands:
+      - bash ./setup-eb.sh
+      - rm -rf ./node_modules
+      - eb deploy --timeout 20:
+          timeout: 1200

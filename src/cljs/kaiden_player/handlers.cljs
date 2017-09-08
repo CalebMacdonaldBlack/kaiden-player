@@ -71,7 +71,7 @@
     (prn (str "Playing song: " (get-in cofx [:db :current-song])))
     (rf/dispatch [:get-dancing-gif])
     (aset js/document "title" (get-in cofx [:db :current-song]))
-    (set! (.-src (.getElementById js/document "player-source")) (str "/songs/"(js/encodeURIComponent (get-in cofx [:db :current-song]))))
+    (set! (.-src (.getElementById js/document "player-source")) (str "https://s3-ap-southeast-2.amazonaws.com/kaiden-player/"(js/encodeURIComponent (get-in cofx [:db :current-song]))))
     (.load (.getElementById js/document "player")))
   {:db (assoc (:db cofx) :music-playing true)})
 
