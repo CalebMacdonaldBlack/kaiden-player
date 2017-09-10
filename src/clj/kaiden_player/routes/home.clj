@@ -40,7 +40,7 @@
                                      :metadata {:content-length (read-string file-size)}
                                      :return-values "ALL_OLD")))
        (song-link title))
-     (catch SdkClientException e (if (> repeat-count 5)
+     (catch SdkClientException e (if (> repeat-count 20)
                                      (throw e)
                                      (do (Thread/sleep 3000)
                                          (upload-song request (inc repeat-count))))))))
